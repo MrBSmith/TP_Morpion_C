@@ -17,6 +17,7 @@ char cWhatCharIsPlayer(int dCurrentPlayer);
 int isAlreadyTaken(char cMorpionArray[3][3], int xNewMove, int yNewMove);
 int isAPlayerWinning(char cMorpionArray[3][3]);
 void printWinner(int dWin, char cMorpionArray[3][3]);
+void printCurrentPlayer(int dCurrentPlayer);
 
 int main()
 {
@@ -45,9 +46,12 @@ int main()
 
         // Ask the player to enter the coordinates of his next move until he gives an empty location
         do{
-            printf("Where do you want to play?\n");
+            printCurrentPlayer(dCurrentPlayer);
+            printf("Ou voulez vous jouer?\n\n");
             xNewMove = askForX(xNewMove);
             yNewMove = askForY(yNewMove);
+
+            // Give a warning message if the cell is already taken
             if(isAlreadyTaken(cMorpionArray, xNewMove, yNewMove) == true){
                 printf("Un coup a deja ete joue a cet endroit\n");
             }
@@ -58,7 +62,12 @@ int main()
 
         // Check for the win of one of the players, if one is winning print which one
         dWin = isAPlayerWinning(cMorpionArray);
-        printWinner(dWin, cMorpionArray);
+
+        // Print on screen who is the winner if there is one
+        if(dWin != 0){
+            printWinner(dWin, cMorpionArray);
+        }
+
 
         // Toggle the player, so we can start the next turn
         dCurrentPlayer = togglePlayer(dCurrentPlayer);
@@ -66,8 +75,14 @@ int main()
         // Increment the move counter
         dMoveCounter++;
 
-    } while((dWin == 0) ||(dMoveCounter == 9));
-    // Get out of the game loop is a player as won or if the Morpion is full
+        // Print a message in case of a draw
+        if((dMoveCounter == 9) && (dWin == 0)){
+            printf("Egalite!");
+            break;
+        }
+
+    } while(dWin == 0);
+    // Get out of the game loop if a player as won
 
     return 0;
 }
@@ -111,6 +126,7 @@ void printMorpion(char cMorpionArray[3][3]){
             printf("-- -- --\n");
         }
     }
+    printf("\n");
 }
 
 // Check if the input of the player is inside the bounds of the Morpion
@@ -228,13 +244,25 @@ void printWinner(int dWin, char cMorpionArray[3][3]){
 
         // Print the table on screen
         printMorpion(cMorpionArray);
-        printf("\nThe player playing circles has won!!!\n");
+        printf("\nLe joueur qui joue les ronds a gagné!!!\n");
 
     } else if(dWin == CROIX){
 
         // Print the table on screen
         printMorpion(cMorpionArray);
-        printf("\nThe player playing crosses has won!!!\n");
+        printf("\nLe joueur qui joue les croix a gagné!!!\n");
 
+    }
+}
+
+// Print who is currently playing
+void printCurrentPlayer(int dCurrentPlayer){
+
+    if(dCurrentPlayer == ROND){
+        printf("C'est a rond de jouer\n");
+    } else if(dCurrentPlayer == CROIX){
+        printf("C'est a croix de jouer\n");
+    } else {
+        printf("Erreur: la variable dCurrentPlayer est mal attribuée\n");
     }
 }

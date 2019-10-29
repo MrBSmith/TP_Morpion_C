@@ -1,0 +1,8 @@
+#fichier Gitignore
+#bin/Debug/TrianglePascal.exe
+#obj/Debug/Main.o
+
+*.layout
+*.exe
+*.o
+*.depend
